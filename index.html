@@ -235,18 +235,20 @@ ul.list li>span:first-child{flex:1 1 auto}
   }
   function news(){
     var items=S.news.slice().sort(function(a,b){return b.date<a.date?-1:1});
-    var h='<section class="panel">'+'<div class="card stack"><h3>Где что найти</h3><p><b>Вкладки — в нижней панели экрана: нажимайте и попадёте куда надо.</b></p>'+'<p><b>Объявления</b> — новости и как добавить сайт на экран телефона.</p>'+'<p><b>Документы</b> — устав СНТ.</p>'+'<p><b>Сметы</b> — сметы, расчёт взноса по номеру участка, смета 2026, ставка, земли общего пользования (ЗОП), отчёт за 2025 год. Разделы переключаются кнопками вверху вкладки.</p>'+'<p><b>Электросети</b> — передача сетей «Россетям»: что решило собрание и что это даст садоводам.</p>'+'<p><b>Заявления</b> — готовый текст обращения в правление.</p>'+'</div>'+howTo();
+    var guide='<div class="card stack"><h3>Где что найти</h3><p><b>Вкладки — в нижней панели экрана: нажимайте и попадёте куда надо.</b></p>'+'<p><b>Объявления</b> — новости и как добавить сайт на экран телефона.</p>'+'<p><b>Документы</b> — устав СНТ.</p>'+'<p><b>Сметы</b> — сметы, расчёт взноса по номеру участка, смета 2026, ставка, земли общего пользования (ЗОП), отчёт за 2025 год. Разделы переключаются кнопками вверху вкладки.</p>'+'<p><b>Электросети</b> — передача сетей «Россетям»: что решило собрание и что это даст садоводам.</p>'+'<p><b>Заявления</b> — готовый текст обращения в правление.</p>'+'</div>'+howTo();
+    var h='<section class="panel">';
     if(isOwner) h+='<div class="card admin stack"><h3>Новое объявление</h3>'+
       '<label>Заголовок<input id="nt" maxlength="120"></label>'+
       '<label>Текст<textarea id="nx"></textarea></label>'+
       '<label>Метка<select id="ng"><option>Важно</option><option>Собрание</option><option>Документы</option><option>Взносы</option><option>Хозяйство</option></select></label>'+
       '<button class="btn" data-act="addNews">Опубликовать</button></div>';
     h+='<div class="stack">';
-    if(!items.length) h+='<p class="muted">Объявлений пока нет.</p>';
-    items.forEach(function(n){
+    if(!items.length) h+='<p class="muted">Объявлений пока нет.</p>'+guide;
+    items.forEach(function(n,i){
       h+='<article class="card"><div class="spread"><span class="pill n">'+esc(n.tag)+'</span><span class="date">'+fmt(n.date)+'</span></div>'+
         '<h2>'+esc(n.title)+'</h2><p>'+esc(n.text).replace(/\n/g,'<br>')+'</p>'+
         (isOwner?'<div class="row"><button class="btn ghost sm" data-act="maxNews" data-id="'+n.id+'">Скопировать для MAX</button><button class="x" data-act="delNews" data-id="'+n.id+'">Удалить</button></div><pre class="out" id="mx_'+n.id+'" hidden></pre>':'')+'</article>';
+      if(i===0) h+=guide;
     });
     return h+'</div></section>';
   }
