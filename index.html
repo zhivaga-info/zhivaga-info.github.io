@@ -4,6 +4,41 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<script id="zh-auto-refresh">
+/* Refresh the installed iPhone web app when a newer GitHub Pages HTML is available. */
+(function(){
+  var checking=false, lastCheck=0;
+  function checkUpdates(){
+    if(checking || Date.now()-lastCheck<3000 || document.visibilityState==='hidden') return;
+    checking=true;
+    lastCheck=Date.now();
+    fetch('/index.html',{cache:'no-store'}).then(function(response){
+      if(!response.ok) throw new Error('Unavailable');
+      return response.text();
+    }).then(function(html){
+      var match=html.match(/<script type="application\\/json" id="state">([\\s\\S]*?)<\\/script>/);
+      var current=document.getElementById('state');
+      if(!match || !current || match[1]===current.textContent) return;
+      document.open();
+      document.write(html);
+      document.close();
+    }).catch(function(){
+      /* Offline: keep the current page and retry at next launch. */
+    }).then(function(){checking=false;});
+  }
+  window.addEventListener('pageshow',checkUpdates);
+  window.addEventListener('focus',checkUpdates);
+  document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='visible') checkUpdates();
+  });
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',checkUpdates,{once:true});
+  }else{
+    checkUpdates();
+  }
+})();
+</script>
 <meta name="application-name" content="Живага — объявления на главной">
 <meta name="description" content="Приложение садоводов СНТ «Живага»: объявления, устав, сметы, расчёт взноса по участку.">
 <meta name="theme-color" content="#2c6a4c">
