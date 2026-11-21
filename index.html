@@ -17,9 +17,10 @@
       if(!response.ok) throw new Error('Unavailable');
       return response.text();
     }).then(function(html){
-      var match=html.match(/<script type="application\\/json" id="state">([\\s\\S]*?)<\\/script>/);
+      var remote=new DOMParser().parseFromString(html,'text/html');
+      var remoteState=remote.getElementById('state');
       var current=document.getElementById('state');
-      if(!match || !current || match[1]===current.textContent) return;
+      if(!remoteState || !current || remoteState.textContent===current.textContent) return;
       document.open();
       document.write(html);
       document.close();
